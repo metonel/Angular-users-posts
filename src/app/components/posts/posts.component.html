@@ -1,0 +1,13 @@
+<app-post-form [currentPost]="currentPost" [isEdit]="isEdit" (newPost)="onNewPost($event)" (updatedPost)="onUpdatedPost($event)"></app-post-form> <!-- imput-ul e facut cu [], output ii cu (). currentPost ii trimis inpit la form component pt editare, newPost vine ca output din post component  -->
+
+<h2>Postari:</h2>
+<div class="card  mb-2" *ngFor="let post of posts">
+  <div class="card-body">
+    <h3><a routerLink="/post/{{ post.id }}"> {{ post.title }} </a></h3>
+    <p>{{ post.body }}</p>
+    <hr>
+    <button (click)="removePost(post)" class="btn btn-danger"><i class="fa fa-remove"></i></button>
+    <button (click)="editPost(post)" class="btn btn-light"><i class="fa fa-pencil"></i></button>
+  </div>
+
+</div>

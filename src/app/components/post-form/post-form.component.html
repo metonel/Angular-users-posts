@@ -1,0 +1,18 @@
+<h2>Postare noua</h2>
+<div class="card card-body mb-3">
+  <form>
+    <div class="form-group">
+      <label>Titlu</label>
+      <input type="text" class="form-control" [(ngModel)]="currentPost.title" name="titlu" #titlu>
+    </div>
+    <div class="form-group">
+      <label>Text</label>
+      <input type="text" class="form-control" name="text" [(ngModel)]="currentPost.body" #text>
+    </div>
+
+    <input type="hidden" [(ngModel)]="currentPost.id" name="id">
+    <button *ngIf="!isEdit" (click)="adaugarePost(titlu.value, text.value)" class="btn btn-dark btn-block">adauga postarea</button>
+
+    <button *ngIf="isEdit" (click)="updatePost(titlu.value, text.value)" class="btn btn-warning btn-block">modifica postarea</button>  
+  </form>
+</div>

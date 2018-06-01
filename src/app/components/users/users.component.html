@@ -1,0 +1,74 @@
+<button (click)="arataFormUser = !arataFormUser" class="btn btn-dark mb-3">adauga user</button>
+<div class="card card-body mb-3"*ngIf="arataFormUser">
+  <h2>adaugare user</h2>
+  <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)">
+    <div class="form-group">
+      <label>prenume</label>
+      <input 
+        type="text" 
+        [(ngModel)]="user.prenume" 
+        [ngClass]="{'is-invalid' : userPrenume.errors && userPrenume.touched}"
+        class="form-control" 
+        name="prenume"
+        #userPrenume="ngModel"  
+        required 
+        minlength="2"
+      > <!--#userPrenume="ngModel" ii shorthand in loc de userForm.prenume.value.etc | tot asta se fol si in ngClass cand se seteaza clasa is-invalid ! ! !   -->
+      <div [hidden]="!userPrenume.errors?.required" class="invalid-feedback">numele este necesar!</div> <!-- Elvis operator, il arata doar daca dintre erori required-ul este activ, daca sunt alte erori nu apare | div-ul cu clasa invalid-feedback trebuie sa fie in div-ul cu clasa form-group pentru a functiona (e componenta bootstrap nu angular)-->
+      <div [hidden]="!userPrenume.errors?.minlength" class="invalid-feedback">numele trebuie sa aiba minim 2 caractere!</div>
+    </div>
+    <div class="form-group">
+        <label>nume</label>
+        <input 
+        type="text" 
+        [(ngModel)]="user.nume" 
+        [ngClass]="{'is-invalid' : userNume.errors && userNume.touched}"
+        class="form-control" 
+        name="nume"
+        #userNume="ngModel"  
+        required 
+        minlength="2"
+      > 
+      <div [hidden]="!userNume.errors?.required" class="invalid-feedback">prenumele este necesar!</div> 
+      <div [hidden]="!userNume.errors?.minlength" class="invalid-feedback">prenumele trebuie sa aiba minim 2 caractere!</div>
+      </div>
+      <div class="form-group">
+        <label>email</label>
+        <input 
+        type="email" 
+        #userEmail="ngModel" 
+        [(ngModel)]="user.email" 
+        [ngClass]="{'is-invalid' : userEmail.errors && userEmail.touched}"
+        class="form-control" 
+        name="email" 
+        required 
+        pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+      > 
+      <div [hidden]="!userEmail.errors?.required" class="invalid-feedback">email-ul este necesar!</div> 
+      <div [hidden]="!userNume.errors?.pattern" class="invalid-feedback">format email invalid!</div>
+      </div>
+      
+
+    <!-- <button [disabled]="user.prenume == '' || user.nume =='' " class="btn btn-block mb-3">creare user</button>   validare mai simpla, e inactiv daca lipseste numela sau prenumele-->
+
+    <button [disabled]="!userForm.form.valid" class="btn btn-block mb-3">creare user</button> <!-- e activ doar daca se valideaza toate conditiile de validare din userForm -->
+  </form>
+</div>
+
+<h2>Utilizatori</h2>
+<ul class="list-unstyled" *ngIf=" loaded && users?.length > 0;else noUsers">
+  <!-- *ngFor din <small> ii pt useru creat de la buton, care nu are detalii si atunci nu are nevoie de butonul +/- -->
+  <li class="card card-body mb-2" *ngFor="let user of users" [class.bg-light]="user.eActiv">
+    <h3 >{{user.nume }} {{user.prenume}} <small *ngIf="user.email"><button (click)="arata(user)" class="btn btn-dark btn-sm"> <i [ngClass]="user.ascunde ? 'fa fa-plus' : 'fa fa-minus' "></i> </button></small> </h3>
+    <ul class="list-group" *ngIf="!user.ascunde && user.email">
+      <li class="list-group-item">
+        email: {{user.email}} 
+      </li>
+    </ul>
+
+
+
+  </li>
+</ul>
+
+<ng-template #noUsers>se populeaza lista de useri...</ng-template>
